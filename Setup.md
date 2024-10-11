@@ -27,6 +27,16 @@ Follow the cli instructions, when done make sure you remember the password used 
 - `~/.step/secrets/root_ca_key`
 - `~/.step/secrets/intermediate_ca_key`
 
+### My Setup
+✔ Root certificate: /home/abastiuchenko/.step/certs/root_ca.crt  
+✔ Root private key: /home/abastiuchenko/.step/secrets/root_ca_key  
+✔ Root fingerprint: 03dfd990759ff3e1cec95da4c4dd747b307080983c0b228b1663721e3dbd873e  
+✔ Intermediate certificate: /home/abastiuchenko/.step/certs/intermediate_ca.crt  
+✔ Intermediate private key: /home/abastiuchenko/.step/secrets/intermediate_ca_key  
+✔ Database folder: /home/abastiuchenko/.step/db  
+✔ Default configuration: /home/abastiuchenko/.step/config/defaults.json  
+✔ Certificate Authority configuration: /home/abastiuchenko/.step/config/ca.json  
+
 ## Configure Event Grid Namespace
 
 

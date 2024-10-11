@@ -17,6 +17,16 @@
             }
         },
         {
+            "name": "raspberry_pi",
+            "displayName": "C RaspberryPi PoC",
+            "binaryDir": "${sourceDir}/scenarios/${presetName}/c/build",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "PRESET_PATH": "${sourceDir}/scenarios/${presetName}/c"
+            }
+        },
+        {
             "name": "telemetry",
             "displayName": "C Telemetry",
             "binaryDir": "${sourceDir}/scenarios/${presetName}/c/build",
@@ -57,6 +67,15 @@
                 "getting_started"
             ]
         },
+       {
+            "name": "raspberry_pi",
+            "displayName": "C RaspberryPi PoC",
+            "configurePreset": "raspberry_pi",
+            "targets": [
+                "raspberry_pi_client",
+                "server_client"
+            ]
+        },  
         {
             "name": "telemetry",
             "displayName": "C Telemetry",
