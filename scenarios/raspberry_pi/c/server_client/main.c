@@ -11,11 +11,17 @@
 #include "mqtt_callbacks.h"
 #include "mqtt_setup.h"
 
-#define PUB_TOPIC "devicespace/topic1"
-#define PAYLOAD "Hello World!"
-#define SUB_TOPIC "devicespace/+"
+#define SUB_TOPIC "devices/+"
 #define QOS_LEVEL 1
 #define MQTT_VERSION MQTT_PROTOCOL_V311
+
+void handle_message(
+    struct mosquitto* mosq,
+    const struct mosquitto_message* message,
+    const mosquitto_property* props)
+{
+  printf("\tPayload: %s\n", (char*)message->payload);
+}
 
 /* Callback called when the client receives a CONNACK message from the broker and we want to
  * subscribe on connect. */
@@ -57,6 +63,7 @@ int main(int argc, char* argv[])
   int result = MOSQ_ERR_SUCCESS;
 
   mqtt_client_obj obj = { 0 };
+  obj.handle_message = handle_message;
   obj.mqtt_version = MQTT_VERSION;
 
   if ((mosq = mqtt_client_init(true, argv[1], on_connect_with_subscribe, &obj)) == NULL)
@@ -80,13 +87,6 @@ int main(int argc, char* argv[])
   {
     while (keep_running)
     {
-      result = mosquitto_publish_v5(
-          mosq, NULL, PUB_TOPIC, (int)strlen(PAYLOAD), PAYLOAD, QOS_LEVEL, false, NULL);
-
-      if (result != MOSQ_ERR_SUCCESS)
-      {
-        LOG_ERROR("Failure while publishing: %s", mosquitto_strerror(result));
-      }
 
       sleep(5);
     }

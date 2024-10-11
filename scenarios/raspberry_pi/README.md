@@ -159,7 +159,10 @@ This will generate the produced binary in `scenarios/raspberry_pi/c/build/`
 
 ```bash
 # from folder scenarios/raspberry_pi
-c/build/raspberry_pi
+c/build/raspberry_pi_client raspberry_pi_client.env
+```
+```bash
+c/build/server_client server_client.env
 ```
 
 For alternate building/running methods and more information, see the [C documentation](../../mqttclients/c/README.md).

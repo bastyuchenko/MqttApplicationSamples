@@ -208,6 +208,52 @@
             }
         },
         {
+            "name": "C RaspberryPi Client",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/scenarios/raspberry_pi/c/build/raspberry_pi_client",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/scenarios/raspberry_pi",
+            "args": [
+                "${workspaceFolder}/scenarios/raspberry_pi/raspberry_pi_client.env"
+            ],
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build C RaspberryPi",
+            "presentation": {
+                "order": 6,
+                "group": "C"
+            }
+        },
+        {
+            "name": "C RaspberryPi Server",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/scenarios/raspberry_pi/c/build/server_client",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/scenarios/raspberry_pi",
+            "args": [
+                "${workspaceFolder}/scenarios/raspberry_pi/server_client.env"
+            ],
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build C RaspberryPi",
+            "presentation": {
+                "order": 7,
+                "group": "C"
+            }
+        },
+        {
             "name": "TypeScript Getting Started",
             "type": "node",
             "request": "launch",

@@ -51,6 +51,11 @@
             "command": "cmake --preset=getting_started;cmake --build --preset=getting_started"
         },
         {
+            "label": "Build C RaspberryPi",
+            "type": "shell",
+            "command": "cmake --preset=raspberry_pi;cmake --build --preset=raspberry_pi"
+        },
+        {
             "label": "Build C Telemetry",
             "type": "shell",
             "command": "cmake --preset=telemetry;cmake --build --preset=telemetry"

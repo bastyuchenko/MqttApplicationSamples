@@ -11,41 +11,10 @@
 #include "mqtt_callbacks.h"
 #include "mqtt_setup.h"
 
-#define PUB_TOPIC "devicespace/topic1"
+#define PUB_TOPIC "devices/rasp"
 #define PAYLOAD "Hello World!"
-#define SUB_TOPIC "devicespace/+"
 #define QOS_LEVEL 1
 #define MQTT_VERSION MQTT_PROTOCOL_V311
-
-/* Callback called when the client receives a CONNACK message from the broker and we want to
- * subscribe on connect. */
-void on_connect_with_subscribe(
-    struct mosquitto* mosq,
-    void* obj,
-    int reason_code,
-    int flags,
-    const mosquitto_property* props)
-{
-  on_connect(mosq, obj, reason_code, flags, props);
-
-  int result;
-
-  /* Making subscriptions in the on_connect() callback means that if the
-   * connection drops and is automatically resumed by the client, then the
-   * subscriptions will be recreated when the client reconnects. */
-  if (keep_running
-      && (result = mosquitto_subscribe_v5(mosq, NULL, SUB_TOPIC, QOS_LEVEL, 0, NULL))
-          != MOSQ_ERR_SUCCESS)
-  {
-    LOG_ERROR("Failed to subscribe: %s", mosquitto_strerror(result));
-    keep_running = 0;
-    /* We might as well disconnect if we were unable to subscribe */
-    if ((result = mosquitto_disconnect_v5(mosq, reason_code, props)) != MOSQ_ERR_SUCCESS)
-    {
-      LOG_ERROR("Failed to disconnect: %s", mosquitto_strerror(result));
-    }
-  }
-}
 
 /*
  * This client sends and receives messages to/from the Broker.
@@ -59,7 +28,7 @@ int main(int argc, char* argv[])
   mqtt_client_obj obj = { 0 };
   obj.mqtt_version = MQTT_VERSION;
 
-  if ((mosq = mqtt_client_init(true, argv[1], on_connect_with_subscribe, &obj)) == NULL)
+  if ((mosq = mqtt_client_init(true, argv[1], on_connect, &obj)) == NULL)
   {
     result = MOSQ_ERR_UNKNOWN;
   }
