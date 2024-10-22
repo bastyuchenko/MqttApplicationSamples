@@ -1,4 +1,4 @@
-# :point_right: Getting Started
+# Getting Started
 
 | [Create the Client Certificate](#lock-create-the-client-certificate) | [Configure Event Grid Namespaces](#triangular_ruler-configure-event-grid-namespaces) | [Configure Mosquitto](#fly-configure-mosquitto) | [Run the PoC](#game_die-run-the-PoC) |
 
@@ -22,7 +22,7 @@ The PoC provides step by step instructions on how to perform following tasks:
 |server_client|subscriber|subscribe|devices/+|
 
 
-##  :lock: Create the client certificate
+##  Create the client certificate
 
 Using the CA files, as described in [setup](../../Setup.md), 
 * create a certificates for `raspberry_pi_client` client.  Client certificate is created with subject name as "raspberry_pi_client".  This must match the authentication name of the client.
@@ -49,7 +49,7 @@ step certificate create \
     --not-after 2400h
 ```
 
-## :triangular_ruler: Configure Event Grid Namespaces
+## Configure Event Grid Namespaces
 
 Ensure to create an Event Grid namespace by following the steps in [setup](../setup).  Event Grid namespace requires registering the client, and the topic spaces to authorize the publish/subscribe permissions.
 
