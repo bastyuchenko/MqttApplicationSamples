@@ -144,7 +144,7 @@ echo "MQTT_KEY_FILE=server_client.key" >> server_client.env
 ```
 
 
-## :game_die: Run the PoC
+## Run the PoC
 
 The PoC are designed to be executed from the root scenario folder.
 
