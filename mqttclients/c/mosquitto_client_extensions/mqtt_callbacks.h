@@ -6,6 +6,10 @@
 
 #include "mosquitto.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Callback called when the client receives a CONNACK message from the broker. */
 void on_connect(
     struct mosquitto* mosq,
@@ -47,3 +51,7 @@ void on_publish(
     const mosquitto_property* props);
 
 #endif /* MQTT_CALLBACKS_H */
+
+#ifdef __cplusplus
+}
+#endif

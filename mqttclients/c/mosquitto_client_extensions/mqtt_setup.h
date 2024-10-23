@@ -13,6 +13,10 @@
 #define DEFAULT_USE_TLS true
 #define DEFAULT_CLEAN_SESSION true
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern volatile sig_atomic_t keep_running;
 
 typedef struct mqtt_client_connection_settings
@@ -67,3 +71,7 @@ bool set_bool_connection_setting(bool* connection_setting, char* env_name, bool 
 bool mqtt_client_set_connection_settings(mqtt_client_connection_settings* connection_settings);
 
 #endif /* MQTT_SETUP_H */
+
+#ifdef __cplusplus
+}
+#endif
