@@ -1,56 +1,48 @@
 #include "bme280.h"
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #define HUMIDITY "/sys/bus/iio/devices/iio:device0/in_humidityrelative_input"
-#define HUMIDITY_RATIO "/sys/bus/iio/devices/iio:device0/in_humidityrelative_oversampling_ratio"
 #define PRESSURE "/sys/bus/iio/devices/iio:device0/in_pressure_input"
-#define PRESSURE_RATIO "/sys/bus/iio/devices/iio:device0/in_pressure_oversampling_ratio"
 #define TEMPERATURE "/sys/bus/iio/devices/iio:device0/in_temp_input"
-#define TEMPERATURE_RATIO "/sys/bus/iio/devices/iio:device0/in_temp_oversampling_ratio"
 
-int readGaudge(float* rawValue, char* filePath)
-{
-  FILE* inputStream;
-  inputStream = fopen(filePath, "r");
-  if (inputStream == NULL)
-  {
-    perror("Failed to open file");
-    return EXIT_FAILURE;
-  }
+static int readGauge(float *value, const char *filePath) {
+    FILE *inputStream = fopen(filePath, "r");
+    if (inputStream == NULL) {
+        perror("Failed to open file");
+        return EXIT_FAILURE;
+    }
 
-  if (fscanf(inputStream, "%f", rawValue) != 1)
-  {
-    perror("Failed to read file");
+    if (fscanf(inputStream, "%f", value) != 1) {
+        perror("Failed to read file");
+        fclose(inputStream);
+        return EXIT_FAILURE;
+    }
+
     fclose(inputStream);
-    return EXIT_FAILURE;
-  }
-
-  fclose(inputStream);
+    return EXIT_SUCCESS;
 }
 
-Bme280Data readBME280()
-{
-  Bme280Data readings;
+Bme280Data readBME280() {
+    Bme280Data readings;
+    float rawHumidity = 0.0f;
+    float rawPressure = 0.0f;
+    float rawTemperature = 0.0f;
 
-  float rawHumidity;
-  float rawPressure;
-  float rawTemperature;
+    if (readGauge(&rawHumidity, HUMIDITY) == EXIT_FAILURE ||
+        readGauge(&rawPressure, PRESSURE) == EXIT_FAILURE ||
+        readGauge(&rawTemperature, TEMPERATURE) == EXIT_FAILURE) {
+        fprintf(stderr, "Error reading sensors\n");
+        return readings;
+    }
 
-  readGaudge(&rawHumidity, HUMIDITY);
-  readGaudge(&rawPressure, PRESSURE);
-  readGaudge(&rawTemperature, TEMPERATURE);
+    readings.humidity = rawHumidity;
+    readings.pressure = rawPressure * 10.0f;
+    readings.temperature = rawTemperature / 1000.0f;
 
-  readings.humidity = rawHumidity;
+    printf("Humidity: %.2f\n", readings.humidity);
+    printf("Pressure: %.2f hPa\n", readings.pressure);
+    printf("Temperature: %.2f°C\n", readings.temperature);
 
-  readings.pressure = rawPressure * 10.0;
-
-  readings.temperature = rawTemperature / 1000.0;
-
-  printf("Raw Humidity: %d\n", readings.humidity );
-  printf("Raw Pressure: %f\n", readings.pressure );
-  printf("Raw Temperature: %f\n", readings.temperature );
-
-  return readings;
+    return readings;
 }
