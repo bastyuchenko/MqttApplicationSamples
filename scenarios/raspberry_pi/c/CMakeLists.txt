@@ -4,9 +4,14 @@
 set(CMAKE_CACHEFILE_DIR ${CMAKE_CURRENT_LIST_DIR}/build)
 
 # raspberry_pi
-add_executable (raspberry_pi_client
+add_executable (raspberry_pi_client_1
   ${MOSQUITTO_CLIENT_EXTENSIONS}
-  ${CMAKE_CURRENT_LIST_DIR}/raspberry_pi_client/main.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/raspberry_pi_client/main1.cpp
+)
+
+add_executable (raspberry_pi_client_2
+  ${MOSQUITTO_CLIENT_EXTENSIONS}
+  ${CMAKE_CURRENT_LIST_DIR}/raspberry_pi_client/main2.cpp
 )
 
 # server_client

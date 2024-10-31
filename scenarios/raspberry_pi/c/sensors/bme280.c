@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// /sys/bus/iio/devices/iio:device0 is link to -> /sys/devices/platform/soc/fe804000.i2c/i2c-1/1-0076/iio:device0
 #define HUMIDITY "/sys/bus/iio/devices/iio:device0/in_humidityrelative_input"
 #define PRESSURE "/sys/bus/iio/devices/iio:device0/in_pressure_input"
 #define TEMPERATURE "/sys/bus/iio/devices/iio:device0/in_temp_input"

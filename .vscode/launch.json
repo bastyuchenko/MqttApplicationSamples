@@ -208,10 +208,33 @@
             }
         },
         {
-            "name": "C RaspberryPi Client",
+            "name": "C RaspberryPi Client 1",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/scenarios/raspberry_pi/c/build/raspberry_pi_client",
+            "program": "${workspaceFolder}/scenarios/raspberry_pi/c/build/raspberry_pi_client_1",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/scenarios/raspberry_pi",
+            "args": [
+                "${workspaceFolder}/scenarios/raspberry_pi/raspberry_pi_client.env"
+            ],
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build C RaspberryPi",
+            "presentation": {
+                "order": 6,
+                "group": "C"
+            }
+        },
+        {
+            "name": "C RaspberryPi Client 2",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/scenarios/raspberry_pi/c/build/raspberry_pi_client_2",
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/scenarios/raspberry_pi",
             "args": [

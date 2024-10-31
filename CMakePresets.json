@@ -72,7 +72,8 @@
             "displayName": "C RaspberryPi PoC",
             "configurePreset": "raspberry_pi",
             "targets": [
-                "raspberry_pi_client",
+                "raspberry_pi_client_1",
+                "raspberry_pi_client_2",
                 "server_client"
             ]
         },  
