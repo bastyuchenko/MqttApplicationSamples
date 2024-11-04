@@ -1,3 +1,8 @@
+// In Linux, hardware devices are often represented as files in the filesystem. This abstraction
+// allows developers to interact with hardware using familiar file operations such as open, read,
+// write, and close. This method simplifies the process of device communication in user space
+// without needing to dive into complex kernel space operations.
+
 #include <cstdint>
 #include <fcntl.h>
 #include <iostream>
@@ -65,7 +70,11 @@ int main()
 {
   while (1)
   {
-
+    // open() function is used here to open the I2C device file (/dev/i2c-1).
+    // /dev/i2c-0, /dev/i2c-1, etc., are device files that represent different I2C buses.
+    // The number after i2c- signifies the bus number. 
+    // This file represents the I2C bus to which the
+    // BME280 is connected. O_RDWR indicates that the file is opened for both reading and writing.
     int file = open(I2C_DEVICE, O_RDWR);
     if (file < 0)
     {
