@@ -5,5 +5,8 @@
     },
     "python.formatting.provider": "none",
     "cmake.configureOnOpen": false,
-    "cmake.options.statusBarVisibility": "visible"
+    "cmake.options.statusBarVisibility": "visible",
+    "files.associations": {
+        "ostream": "cpp"
+    }
 }
