@@ -19,7 +19,6 @@
 // BME280 Registers
 #define BME280_TEMP_MSB_REG 0xFA
 #define BME280_CTRL_MEAS_REG 0xF4
-#define BME280_CONFIG_REG 0xF5
 #define BME280_CALIB00_REG 0x88
 
 using namespace std;
@@ -56,12 +55,30 @@ double compensateTemperature(int32_t adc_T, uint16_t dig_T1, int16_t dig_T2, int
 int32_t readBME280Data(int file, uint8_t regAddress)
 {
   uint8_t buf[3] = { 0 };
-  write(file, &regAddress, 1); // Write the register address to read from
-  read(file, buf, 3); // Read 3 bytes of data from the register
 
-  // Combine the bytes to create the raw data value
-  int32_t data = (buf[0] << 16) | (buf[1] << 8) | buf[2];
-  data >>= 4; // The data is left-aligned so shift right to align it properly
+  //  I2C devices like the BME280 have multiple registers, each serving different purposes (e.g.,
+  //  storing temperature data, humidity data, configuration settings, etc.). To read from a
+  //  specific register, you first need to tell the device which register you're interested in. This
+  //  is done by writing the address of that register to the device. Once the device knows which
+  //  register you want to read, it prepares that data to be sent over the I2C bus when a read
+  //  request is made. It is similar to opening a book on a specific page to read.
+  write(file, &regAddress, 1);
+
+  // Reads first 3 bytes of temperature data starting from &regAddress. The temperature data in the
+  // BME280 sensor is stored across three registers. These are typically labeled as
+  // - MSB (Most Significant Byte) holds the upper part of the measurement data. Contains the upper
+  // 8 bits.
+  // - LSB (Least Significant Byte) holds the middle part of the measurement data. Contains the
+  // upper 8 bits.
+  // - XLSB (Extended Least Significant Byte) contains the lower bits of the measurement data.
+  // Contains the lower 4 bits used and 4 bits of padding or unused data. 
+  read(file, buf, 3);
+
+  // Combine the bytes to create the raw data value. 
+  // The first byte should be shifter relates to the second byte and contains 8 bits.
+  // The second byte should be shifter relates to the second byte and contains 8 bits.
+  // The third byte should be right-shifter because only 4 bits used and 4 bits of padding or unused data.
+  int32_t data = (buf[0] << 12) | (buf[1] << 4) | buf[2] >> 4;
 
   return data;
 }
@@ -70,11 +87,12 @@ int main()
 {
   while (1)
   {
+    // In Linux, hardware devices are often represented as files in the filesystem.
     // open() function is used here to open the I2C device file (/dev/i2c-1).
-    // /dev/i2c-0, /dev/i2c-1, etc., are device files that represent different I2C buses.
-    // The number after i2c- signifies the bus number. 
-    // This file represents the I2C bus to which the
-    // BME280 is connected. O_RDWR indicates that the file is opened for both reading and writing.
+    // /dev/i2c-0, /dev/i2c-1, etc., are device files that represent different I2C buses (different
+    // I2C set of pins on the board). The number after i2c- signifies the bus number. This file
+    // represents the I2C bus to which the BME280 is connected. O_RDWR indicates that the file is
+    // opened for both reading and writing.
     int file = open(I2C_DEVICE, O_RDWR);
     if (file < 0)
     {
@@ -82,6 +100,21 @@ int main()
       return -1;
     }
 
+    // I2C (Inter-Integrated Circuit) is a multi-master, multi-slave, packet-switched, single-ended,
+    // serial communication bus. This means that multiple devices (slaves) can be connected to the
+    // same bus and controlled by a master (in this case, the Raspberry Pi).
+    // Each device (slave) on the bus is assigned a unique address. This address is used by the
+    // master to communicate with a specific slave device (BME280).
+    // In this case, we installed `i2cdetect`
+    // > sudo apt-get update
+    // > sudo apt-get install i2c-tools g++
+    // Run the command:
+    // > i2cdetect -y 1
+    // This will display a grid of addresses with the address of your BME280 sensor highlighted if
+    // connected properly. In fact, for the current case BME280_I2C_ADDR = 0x76 After this call, any
+    // I2C operations performed on this file descriptor will communicate with the BME280 sensor.
+    // The I2C_SLAVE constant is used to indicate that you want to set the slave address for
+    // subsequent I2C operations.
     if (ioctl(file, I2C_SLAVE, BME280_I2C_ADDR) < 0)
     {
       cerr << "Error setting I2C address" << endl;
